@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#050810">
+<title>NOVA AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:system-ui,sans-serif;background:#050810;color:#e8f4f8;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+::-webkit-scrollbar{width:3px;} ::-webkit-scrollbar-thumb{background:#00d2ff44;}
+
+/* HEADER */
+#header{background:#080d1a;border-bottom:1px solid #00d2ff22;padding:10px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+#logo{font-size:18px;font-weight:900;letter-spacing:3px;background:linear-gradient(135deg,#00d2ff,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#mode-bar{display:flex;gap:2px;background:#0d1528;border-radius:6px;padding:2px;border:1px solid #00d2ff22;flex:1;}
+.mpill{flex:1;padding:5px 2px;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#3d5a73;text-align:center;letter-spacing:.5px;}
+.mpill.on{background:rgba(0,210,255,.15);color:#00d2ff;}
+#mpill-fusion{color:#ffd16699;}
+#mpill-fusion.on{background:rgba(255,209,102,.12);color:#ffd166;}
+.hbtn{width:30px;height:30px;border-radius:7px;background:#0d1528;border:1px solid #00d2ff22;color:#7a9bb5;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+/* MODEL CHIPS */
+#chips{display:flex;gap:5px;padding:7px 12px;overflow-x:auto;border-bottom:1px solid #00d2ff11;background:#05081099;flex-shrink:0;}
+#chips::-webkit-scrollbar{display:none;}
+.chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:14px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid #1a2a3a;background:#0d1528;color:#5a7a90;white-space:nowrap;flex-shrink:0;}
+.chip.on{border-color:var(--c);color:var(--c);background:rgba(0,0,0,.3);}
+.cdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* CHAT */
+#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px;}
+.msg{display:flex;gap:8px;animation:fu .25s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg.u{flex-direction:row-reverse;}
+.av{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;border:1px solid #1a2a3a;}
+.av.ua{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.3);color:#ffd166;}
+.av.aa{background:rgba(0,210,255,.08);border-color:#00d2ff33;color:#00d2ff;}
+.mwrap{flex:1;max-width:88%;}
+.mtag{font-size:9px;color:#3d5a73;letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;}
+.msg.u .mtag{text-align:right;}
+.bub{padding:10px 13px;border-radius:10px;font-size:13px;line-height:1.65;display:inline-block;text-align:left;}
+.bub.ub{background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.18);border-radius:10px 3px 10px 10px;}
+.bub.ab{background:#0d1528;border:1px solid #1a2a3a;border-radius:3px 10px 10px 10px;width:100%;}
+.bub h1,.bub h2,.bub h3{color:#00d2ff;margin:8px 0 4px;font-size:.95em;}
+.bub p{margin:4px 0;}
+.bub ul,.bub ol{padding-left:16px;margin:4px 0;}
+.bub code{background:#000a;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;color:#00d2ff;}
+.bub pre{margin:8px 0;border-radius:6px;overflow:auto;background:#000d;padding:10px;}
+.bub pre code{padding:0;background:transparent;}
+.bub strong{color:#ffd166;}
+.bub table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0;}
+.bub th{background:rgba(0,210,255,.1);padding:4px 8px;border:1px solid #1a2a3a;color:#00d2ff;}
+.bub td{padding:4px 8px;border:1px solid #1a2a3a;}
+.mact{display:flex;gap:5px;margin-top:5px;}
+.abtn{padding:2px 8px;border-radius:5px;font-size:9px;border:1px solid #1a2a3a;background:transparent;color:#3d5a73;cursor:pointer;}
+.abtn:hover{color:#7a9bb5;border-color:#00d2ff44;}
+.ti{display:flex;gap:3px;align-items:center;padding:10px 13px;}
+.td{width:5px;height:5px;border-radius:50%;background:#00d2ff;animation:tp 1.4s infinite;}
+.td:nth-child(2){animation-delay:.2s;}.td:nth-child(3){animation-delay:.4s;}
+@keyframes tp{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.fusion-wrap{background:#0d1528;border:1px solid rgba(255,209,102,.25);border-radius:10px;padding:14px;width:100%;}
+.fusion-title{font-size:10px;font-weight:700;letter-spacing:2px;color:#ffd166;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.fusion-dot{width:6px;height:6px;border-radius:50%;background:#ffd166;box-shadow:0 0 6px #ffd166;}
+.src-bar{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.src-chip{padding:2px 8px;border-radius:10px;font-size:9px;border:1px solid #1a2a3a;color:#3d5a73;font-weight:600;}
+.src-chip.done{border-color:var(--c);color:var(--c);}
+.src-chip.err{border-color:#ff4d6d44;color:#ff4d6d;}
+.src-chip.wait{animation:tp2 1s infinite;}
+@keyframes tp2{0%,100%{opacity:.4;}50%{opacity:1;}}
+
+/* INPUT */
+#inp-wrap{padding:10px 12px;border-top:1px solid #00d2ff11;background:#080d1a;flex-shrink:0;padding-bottom:max(10px,env(safe-area-inset-bottom));}
+#inbox{background:#0d1528;border:1px solid #00d2ff22;border-radius:11px;transition:border-color .2s;}
+#inbox:focus-within{border-color:#00d2ff55;}
+#inrow{display:flex;align-items:flex-end;}
+#msgin{flex:1;padding:12px 13px;background:transparent;border:none;outline:none;color:#e8f4f8;font-family:system-ui;font-size:14px;resize:none;max-height:110px;min-height:44px;line-height:1.5;}
+#msgin::placeholder{color:#3d5a73;}
+#sendbtn{width:38px;height:38px;margin:3px;background:linear-gradient(135deg,#00d2ff,#0099bb);border:none;border-radius:8px;color:#000;cursor:pointer;font-size:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+#sendbtn:disabled{opacity:.4;}
+#btns{padding:5px 10px 8px;display:flex;gap:5px;align-items:center;}
+.mbtn{width:30px;height:30px;border-radius:7px;border:1px solid #1a2a3a;background:#0d1528;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.mbtn.rec{border-color:#ff4d6d;animation:tp2 1s infinite;}
+.mbtn.tts{border-color:#06ffa5;}
+#ccnt{margin-left:auto;font-size:9px;color:#3d5a73;}
+
+/* BOTTOM NAV */
+#botnav{display:flex;border-top:1px solid #00d2ff11;background:#080d1a;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
+.nb{flex:1;padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:transparent;color:#3d5a73;}
+.nb.on{color:#00d2ff;}
+.ni{font-size:17px;}
+.nl{font-size:9px;font-weight:700;letter-spacing:.5px;}
+
+/* SCREENS */
+.scr{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.scr.on{display:flex;}
+
+/* SETUP */
+#setup-scr{overflow-y:auto;padding:16px;gap:12px;}
+.setup-card{border-radius:10px;padding:14px;}
+.scinput{width:100%;padding:9px 12px;background:#050810;border-radius:7px;color:#e8f4f8;font-family:monospace;font-size:12px;outline:none;margin:8px 0;}
+.scbtn{padding:8px 14px;border-radius:7px;font-family:system-ui;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;}
+
+/* ACCOUNTS */
+#acc-scr{overflow-y:auto;padding:14px;gap:8px;}
+.acard{background:#0d1528;border:1px solid #1a2a3a;border-radius:10px;overflow:hidden;}
+.ahead{padding:11px 14px;display:flex;align-items:center;gap:10px;}
+.aname{font-size:12px;font-weight:700;}
+.adesc{font-size:9px;color:#5a7a90;margin-top:1px;}
+.astatus{font-size:9px;padding:2px 8px;border-radius:8px;border:1px solid #1a2a3a;color:#3d5a73;margin-left:auto;font-weight:600;}
+.astatus.ok{border-color:#06ffa544;color:#06ffa5;}
+.akey{padding:0 14px 12px;display:flex;gap:6px;}
+.akeyinput{flex:1;padding:8px 11px;background:#050810;border:1px solid #1a2a3a;border-radius:7px;color:#e8f4f8;font-family:monospace;font-size:11px;outline:none;}
+.akeybtn{padding:8px 12px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;font-family:system-ui;letter-spacing:.5px;}
+
+/* WEB */
+#web-scr{flex-direction:column;}
+#wtabs{display:flex;gap:3px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid #00d2ff11;background:#080d1a;flex-shrink:0;}
+#wtabs::-webkit-scrollbar{display:none;}
+.wtab{padding:5px 12px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#3d5a73;white-space:nowrap;}
+.wtab.on{background:rgba(0,210,255,.12);color:#00d2ff;}
+#wframes{flex:1;position:relative;}
+.wframe{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;}
+.wframe.on{display:flex;}
+.wopenbtn{padding:12px 24px;border-radius:9px;border:none;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;}
+
+/* NOTIF */
+.notif{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:999;padding:9px 18px;border-radius:9px;background:#0d1528;border:1px solid #00d2ff44;font-size:11px;color:#e8f4f8;white-space:nowrap;animation:fu .3s ease;}
+.notif.ok{border-color:#06ffa544;color:#06ffa5;}
+.notif.err{border-color:#ff4d6d44;color:#ff4d6d;}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="logo">NOVA</div>
+  <div id="mode-bar">
+    <button class="mpill on" id="mpill-single" onclick="setMode('single')">SINGLE</button>
+    <button class="mpill" id="mpill-compare" onclick="setMode('compare')">COMPARE</button>
+    <button class="mpill" id="mpill-agent" onclick="setMode('agent')">AGENT</button>
+    <button class="mpill" id="mpill-fusion" onclick="setMode('fusion')">⚡FUSION</button>
+  </div>
+  <button class="hbtn" onclick="newChat()">+</button>
+  <button class="hbtn" onclick="showScr('acc')">⚙</button>
+</div>
+
+<div id="chips"></div>
+
+<div id="scrs" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+  <!-- SETUP -->
+  <div class="scr on" id="setup-scr">
+    <div style="text-align:center;padding:24px 0 12px;">
+      <div style="font-size:32px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00d2ff,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NOVA AI</div>
+      <div style="font-size:10px;color:#5a7a90;letter-spacing:2px;margin-top:4px;">ADD API KEY TO START</div>
+    </div>
+
+    <div class="setup-card" style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.3);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:18px;">✨</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#4285f4;">Gemini — Google AI</div>
+          <div style="font-size:10px;color:#06ffa5;font-weight:700;">✅ 100% FREE · No credit card needed</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#7a9bb5;line-height:1.7;margin-bottom:10px;">
+        1. Tap button below<br>
+        2. Sign in with your Google account<br>
+        3. Click "Get API Key" → "Create API key"<br>
+        4. Copy the key → paste below → tap SAVE
+      </div>
+      <button onclick="window.open('https://aistudio.google.com/apikey','_blank')"
+        style="width:100%;padding:10px;border-radius:8px;background:rgba(66,133,244,.15);border:1px solid rgba(66,133,244,.4);color:#4285f4;font-family:system-ui;font-size:11px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+        🔗 OPEN GOOGLE AI STUDIO (FREE)
+      </button>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="sk-gemini" placeholder="Paste your Gemini API key (AIza...)" class="scinput" style="margin:0;flex:1;border:1px solid rgba(66,133,244,.3);">
+        <button class="scbtn" onclick="saveSetupKey('gemini','sk-gemini')"
+          style="background:#4285f4;border:none;color:#fff;">SAVE</button>
+      </div>
+    </div>
+
+    <div class="setup-card" style="background:rgba(204,120,92,.07);border:1px solid rgba(204,120,92,.25);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:16px;">🤖</span>
+        <div><div style="font-size:11px;font-weight:700;color:#cc785c;">Claude — Anthropic</div>
+        <div style="font-size:9px;color:#5a7a90;">console.anthropic.com → API Keys</div></div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="sk-claude" placeholder="sk-ant-api03-..." class="scinput" style="margin:0;flex:1;border:1px solid rgba(204,120,92,.3);">
+        <button class="scbtn" onclick="saveSetupKey('claude','sk-claude')" style="background:rgba(204,120,92,.2);border:1px solid rgba(204,120,92,.4);color:#cc785c;">SAVE</button>
+      </div>
+    </div>
+
+    <div class="setup-card" style="background:rgba(16,163,127,.07);border:1px solid rgba(16,163,127,.25);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:16px;">💬</span>
+        <div><div style="font-size:11px;font-weight:700;color:#10a37f;">ChatGPT — OpenAI</div>
+        <div style="font-size:9px;color:#5a7a90;">platform.openai.com → API Keys</div></div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="sk-openai" placeholder="sk-..." class="scinput" style="margin:0;flex:1;border:1px solid rgba(16,163,127,.3);">
+        <button class="scbtn" onclick="saveSetupKey('openai','sk-openai')" style="background:rgba(16,163,127,.2);border:1px solid rgba(16,163,127,.4);color:#10a37f;">SAVE</button>
+      </div>
+    </div>
+
+    <div class="setup-card" style="background:rgba(123,104,238,.07);border:1px solid rgba(123,104,238,.25);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:16px;">🔵</span>
+        <div><div style="font-size:11px;font-weight:700;color:#7b68ee;">DeepSeek</div>
+        <div style="font-size:9px;color:#5a7a90;">platform.deepseek.com → API Keys</div></div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="sk-deepseek" placeholder="sk-..." class="scinput" style="margin:0;flex:1;border:1px solid rgba(123,104,238,.3);">
+        <button class="scbtn" onclick="saveSetupKey('deepseek','sk-deepseek')" style="background:rgba(123,104,238,.2);border:1px solid rgba(123,104,238,.4);color:#7b68ee;">SAVE</button>
+      </div>
+    </div>
+
+    <div id="setup-status" style="text-align:center;font-size:11px;color:#5a7a90;padding:8px;">0 AIs connected</div>
+    <button id="startbtn" onclick="goChat()" disabled
+      style="margin:0 0 16px;padding:14px;border-radius:10px;width:100%;background:#0d1528;border:1px solid #1a2a3a;color:#3d5a73;font-family:system-ui;font-size:13px;font-weight:700;cursor:not-allowed;letter-spacing:2px;transition:all .3s;">
+      ⚡ START NOVA
+    </button>
+  </div>
+
+  <!-- CHAT -->
+  <div class="scr" id="chat-scr">
+    <div id="chat"></div>
+  </div>
+
+  <!-- ACCOUNTS -->
+  <div class="scr" id="acc-scr">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#3d5a73;padding:12px 14px 8px;">CONNECTED ACCOUNTS</div>
+    <div id="acclist"></div>
+  </div>
+
+  <!-- WEB -->
+  <div class="scr" id="web-scr">
+    <div id="wtabs"></div>
+    <div id="wframes"></div>
+  </div>
+
+</div>
+
+<div id="inp-wrap">
+  <div id="inbox">
+    <div id="inrow">
+      <textarea id="msgin" placeholder="Ask anything or speak..." rows="1"
+        onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+      <button id="sendbtn" onclick="send()">➤</button>
+    </div>
+    <div id="btns">
+      <button class="mbtn" id="micbtn" onclick="toggleMic()" title="Voice">🎤</button>
+      <button class="mbtn" id="cambtn" onclick="openCam()" title="Camera">📷</button>
+      <button class="mbtn" onclick="document.getElementById('filein').click()" title="File">📎</button>
+      <button class="mbtn" id="ttsbtn" onclick="toggleTTS()" title="Read aloud">🔊</button>
+      <span id="ccnt">0</span>
+    </div>
+  </div>
+  <input type="file" id="filein" style="display:none" accept="image/*,application/pdf,.txt" onchange="onFile(this)">
+  <input type="file" id="camin" style="display:none" accept="image/*" capture="environment" onchange="onFile(this)">
+  <div id="voicebar" style="display:none;text-align:center;padding:5px;font-size:10px;color:#00d2ff;letter-spacing:1px;animation:tp2 1s infinite;">🎤 LISTENING... TAP MIC TO STOP</div>
+  <div id="attachbar" style="display:none;background:#0d1528;border:1px solid #1a2a3a;border-radius:8px;padding:8px 12px;margin-top:6px;display:none;align-items:center;gap:8px;">
+    <span id="atchico" style="font-size:18px;">📎</span>
+    <div style="flex:1;"><div id="atchname" style="font-size:11px;font-weight:600;"></div><div id="atchsize" style="font-size:9px;color:#5a7a90;"></div></div>
+    <button onclick="clearAttach()" style="background:none;border:none;color:#ff4d6d;cursor:pointer;font-size:15px;">✕</button>
+  </div>
+</div>
+
+<div id="botnav">
+  <button class="nb on" id="nb-chat" onclick="showScr('chat')"><div class="ni">💬</div><div class="nl">CHAT</div></button>
+  <button class="nb" id="nb-acc" onclick="showScr('acc')"><div class="ni">🔗</div><div class="nl">ACCOUNTS</div></button>
+  <button class="nb" id="nb-web" onclick="showScr('web')"><div class="ni">🌐</div><div class="nl">WEB</div></button>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const M = {
+  gemini:    {n:'Gemini',    c:'#4285f4', api:true,  url:'https://gemini.google.com'},
+  claude:    {n:'Claude',    c:'#cc785c', api:true,  url:'https://claude.ai'},
+  openai:    {n:'ChatGPT',   c:'#10a37f', api:true,  url:'https://chatgpt.com'},
+  deepseek:  {n:'DeepSeek',  c:'#7b68ee', api:true,  url:'https://chat.deepseek.com'},
+  perplexity:{n:'Perplexity',c:'#20b2aa', api:true,  url:'https://www.perplexity.ai'},
+  kimi:      {n:'Kimi',      c:'#ff6b6b', api:true,  url:'https://kimi.moonshot.cn'},
+  grok:      {n:'Grok',      c:'#ccc',    api:true,  url:'https://grok.com'},
+  blackbox:  {n:'Blackbox',  c:'#ffd166', api:false, url:'https://www.blackbox.ai'},
+  manus:     {n:'Manus',     c:'#a29bfe', api:false, url:'https://manus.im'},
+};
+
+let mode = 'fusion';
+let sel = [];
+let busy = false;
+let convs = [], cid = null;
+let tts = false, listening = false, attach = null;
+let recog = null;
+
+// ── INIT ──────────────────────────────────────────────────
+function init() {
+  loadSaved();
+  buildChips();
+  buildAccounts();
+  buildWebTabs();
+  const keys = getKeys();
+  const has = Object.values(keys).some(k=>k&&k.length>8);
+  if (has) { goChat(); } else { showScr('setup'); }
+  document.getElementById('msgin').addEventListener('input', function(){
+    document.getElementById('ccnt').textContent = this.value.length;
+  });
+}
+
+function loadSaved() {
+  try { convs = JSON.parse(localStorage.getItem('nc')||'[]'); } catch(e){convs=[];}
+}
+function getKeys() {
+  try { return JSON.parse(localStorage.getItem('nk')||'{}'); } catch(e){return {};}
+}
+function saveKeys(k) { localStorage.setItem('nk', JSON.stringify(k)); }
+function getConv() { return convs.find(c=>c.id===cid); }
+
+// ── SETUP ──────────────────────────────────────────────────
+function saveSetupKey(model, inputId) {
+  const v = document.getElementById(inputId).value.trim();
+  if (!v || v.length < 8) { notif('Paste a valid key first', 'err'); return; }
+  const k = getKeys(); k[model] = v;
+  saveKeys(k);
+  document.getElementById(inputId).value = '';
+  document.getElementById(inputId).placeholder = '✅ Saved!';
+  document.getElementById(inputId).style.borderColor = '#06ffa5';
+  const count = Object.values(getKeys()).filter(x=>x&&x.length>8).length;
+  document.getElementById('setup-status').textContent = count + ' AI' + (count!==1?'s':'') + ' connected ✅';
+  const btn = document.getElementById('startbtn');
+  btn.disabled = false;
+  btn.style.background = 'linear-gradient(135deg,#00d2ff,#0099bb)';
+  btn.style.color = '#000';
+  btn.style.cursor = 'pointer';
+  btn.style.borderColor = '#00d2ff';
+  notif('✅ ' + M[model].n + ' connected!', 'ok');
+  buildAccounts();
+}
+
+function goChat() {
+  newChat();
+  showScr('chat');
+  buildChips();
+  setMode('fusion');
+}
+
+// ── SCREENS ──────────────────────────────────────────────────
+function showScr(name) {
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  const map = {chat:'chat-scr', acc:'acc-scr', web:'web-scr', setup:'setup-scr'};
+  document.getElementById(map[name]||name).classList.add('on');
+  const nb = document.getElementById('nb-'+name);
+  if (nb) nb.classList.add('on');
+}
+
+// ── MODES ──────────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mpill').forEach(p=>p.classList.remove('on'));
+  const el = document.getElementById('mpill-'+m);
+  if(el) el.classList.add('on');
+  const keys = getKeys();
+  if (m === 'fusion' || m === 'compare') {
+    sel = Object.keys(M).filter(id=>M[id].api && keys[id] && keys[id].length>8);
+    if (sel.length===0) sel = ['gemini'];
+  } else if (sel.length > 1) {
+    sel = [sel[0]];
+  }
+  buildChips();
+}
+
+// ── CHIPS ──────────────────────────────────────────────────
+function buildChips() {
+  const bar = document.getElementById('chips');
+  bar.innerHTML = '';
+  const keys = getKeys();
+  Object.entries(M).forEach(([id,m]) => {
+    const on = sel.includes(id);
+    const hasKey = keys[id] && keys[id].length>8;
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (on?' on':'');
+    chip.style.setProperty('--c', m.c);
+    chip.innerHTML = `<div class="cdot" style="${on?'box-shadow:0 0 4px '+m.c:''}"></div>${m.n}${!m.api?'🌐':''}${hasKey&&m.api?'':''}`;
+    chip.onclick = () => toggleChip(id, m);
+    bar.appendChild(chip);
+  });
+}
+
+function toggleChip(id, m) {
+  if (!m.api) { showScr('web'); switchWebTab(id); return; }
+  if (mode==='single') { sel=[id]; }
+  else if (mode==='fusion'||mode==='compare') {
+    if (sel.includes(id)) { if(sel.length>1) sel=sel.filter(x=>x!==id); }
+    else sel.push(id);
+  } else { sel=[id]; }
+  buildChips();
+}
+
+// ── CHAT ──────────────────────────────────────────────────
+function newChat() {
+  cid = 'c'+Date.now();
+  convs.push({id:cid, msgs:[]});
+  document.getElementById('chat').innerHTML = '';
+  addWelcome();
+  save();
+}
+
+function addWelcome() {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;padding:20px;min-height:300px;">
+      <div style="font-size:28px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#00d2ff,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NOVA</div>
+      <div style="font-size:10px;color:#5a7a90;letter-spacing:2px;">ASK ANYTHING</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:380px;">
+        ${[['📋 CRRT 2026','Summarize CRRT 2026 guidelines key points for ICU'],
+           ['💊 Drug Dose','Meropenem dosing in renal failure with CRRT'],
+           ['✍️ LinkedIn','Write LinkedIn post about AI in critical care'],
+           ['🎓 EDIC II','3-month study plan for EDIC II certification'],
+           ['🤖 Compare AIs','Which AI is best for medical research in 2026?'],
+           ['📧 Job Email','Draft Senior Intensivist job application email']
+          ].map(([l,p])=>`<button onclick="qp('${p.replace(/'/g,"\\'")}') "
+            style="padding:9px 8px;border-radius:8px;background:rgba(0,210,255,.04);
+            border:1px solid #1a2a3a;color:#5a7a90;font-size:10px;cursor:pointer;text-align:left;">
+            ${l}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function qp(t) { document.getElementById('msgin').value=t; send(); }
+
+// ── SEND ──────────────────────────────────────────────────
+async function send() {
+  const input = document.getElementById('msgin');
+  const txt = input.value.trim();
+  if (!txt || busy) return;
+
+  const keys = getKeys();
+  const hasKey = Object.values(keys).some(k=>k&&k.length>8);
+  if (!hasKey) {
+    showScr('setup');
+    notif('Add an API key first', 'err');
+    return;
+  }
+
+  document.getElementById('chat').innerHTML = '';
+  input.value = ''; input.style.height='auto';
+  document.getElementById('ccnt').textContent='0';
+
+  const conv = getConv();
+  if (!conv) return;
+  if (conv.msgs.length===0) { convs.find(c=>c.id===cid).title=txt.slice(0,35); }
+
+  const um = {role:'user', content:txt, ts:Date.now()};
+  conv.msgs.push(um);
+  addMsg(um);
+
+  const sysP = document.getElementById('sysin')?.value || 'You are NOVA, an advanced AI assistant for Dr. Mohamed Khalil, Senior Critical Care Intensivist at American Hospital Dubai. Be direct, precise and evidence-based.';
+  const att = attach;
+  clearAttach();
+
+  busy = true;
+  document.getElementById('sendbtn').disabled = true;
+
+  try {
+    if (mode==='fusion') await doFusion(txt, sysP, conv, att);
+    else if (mode==='compare') await doCompare(txt, sysP, conv);
+    else if (mode==='agent') await doAgent(txt, sysP, conv);
+    else await doSingle(txt, sysP, conv, att);
+  } catch(e) {
+    showErr('ERROR', e.message);
+  } finally {
+    busy = false;
+    document.getElementById('sendbtn').disabled = false;
+    save();
+  }
+}
+
+// ── SINGLE ──────────────────────────────────────────────────
+async function doSingle(txt, sys, conv, att) {
+  const model = sel[0] || 'gemini';
+  const typing = addTyping(model);
+  try {
+    const hist = conv.msgs.slice(0,-1).map(m=>({role:m.role,content:m.content}));
+    hist.push({role:'user',content:txt});
+    const r = await callAI(model, hist, sys, att);
+    removeEl(typing);
+    const am = {role:'assistant', content:r, model, ts:Date.now()};
+    conv.msgs.push(am);
+    addMsg(am);
+    if(tts) speak(r);
+  } catch(e) {
+    removeEl(typing);
+    showErr(M[model]?.n||model, e.message);
+  }
+}
+
+// ── FUSION ──────────────────────────────────────────────────
+async function doFusion(txt, sys, conv, att) {
+  const keys = getKeys();
+  const active = sel.filter(id=>M[id].api && keys[id]&&keys[id].length>8);
+  if (active.length===0) {
+    showErr('NOVA', 'No API keys connected. Go to Accounts to add keys.');
+    return;
+  }
+
+  const chat = document.getElementById('chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ai';
+  wrap.innerHTML = `
+    <div class="av aa" style="background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.3);font-size:13px;">⚡</div>
+    <div class="mwrap" style="max-width:100%;width:100%;">
+      <div class="mtag" style="color:#ffd166;">⚡ FUSION — ${active.length} AIs WORKING</div>
+      <div class="fusion-wrap">
+        <div class="src-bar" id="srcbar"></div>
+        <div id="fusionbody"><div class="ti"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>
+      </div>
+    </div>`;
+  chat.appendChild(wrap);
+  scrollBot();
+
+  const srcbar = document.getElementById('srcbar');
+  active.forEach(id => {
+    const c = document.createElement('div');
+    c.className = 'src-chip wait';
+    c.id = 'sc-'+id;
+    c.style.setProperty('--c', M[id].c);
+    c.textContent = M[id].n;
+    srcbar.appendChild(c);
+  });
+
+  const hist = conv.msgs.slice(0,-1).map(m=>({role:m.role,content:m.content}));
+  hist.push({role:'user',content:txt});
+
+  const results = {};
+  const errors = {};
+  await Promise.all(active.map(async id => {
+    try {
+      const r = await callAI(id, hist, sys, att);
+      results[id] = r;
+      const sc = document.getElementById('sc-'+id);
+      if(sc){sc.classList.remove('wait');sc.classList.add('done');sc.style.setProperty('--c',M[id].c);}
+    } catch(e) {
+      results[id] = null;
+      errors[id] = e.message;
+      const sc = document.getElementById('sc-'+id);
+      if(sc){sc.classList.remove('wait');sc.classList.add('err');sc.textContent=M[id].n+' ✗';}
+    }
+    scrollBot();
+  }));
+
+  const valid = Object.entries(results).filter(([,v])=>v);
+  if (valid.length===0) {
+    const errList = Object.entries(errors).map(([id,e])=>`<div style="margin-bottom:6px;"><span style="color:${M[id]?.c||'#ff4d6d'};font-size:10px;font-weight:700;">${M[id]?.n||id}:</span> <span style="color:#ff6b6b;font-size:11px;">${e}</span></div>`).join('');
+    document.getElementById('fusionbody').innerHTML = `
+      <div style="color:#ff4d6d;font-weight:700;margin-bottom:10px;">⚠ All AIs failed. Errors:</div>
+      ${errList}
+      <div style="margin-top:12px;font-size:11px;color:#7a9bb5;line-height:1.7;">
+        <strong style="color:#ffd166;">Common fixes:</strong><br>
+        • UAE network may block APIs — try with VPN<br>
+        • Check key was saved correctly (tap Accounts tab)<br>
+        • Gemini free key: aistudio.google.com<br>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="showScr('acc')" style="padding:8px 14px;border-radius:7px;background:linear-gradient(135deg,#00d2ff,#0099bb);border:none;color:#000;font-size:10px;font-weight:700;cursor:pointer;">🔗 CHECK KEYS</button>
+        <button onclick="runDiag()" style="padding:8px 14px;border-radius:7px;background:rgba(255,209,102,.15);border:1px solid rgba(255,209,102,.3);color:#ffd166;font-size:10px;font-weight:700;cursor:pointer;">🔍 RUN DIAGNOSIS</button>
+      </div>`;
+    return;
+  }
+
+  if (valid.length===1) {
+    const body = document.getElementById('fusionbody');
+    body.innerHTML = renderMD(valid[0][1]);
+    conv.msgs.push({role:'assistant',content:valid[0][1],model:valid[0][0],ts:Date.now()});
+    if(tts) speak(valid[0][1]);
+    return;
+  }
+
+  // Synthesize
+  document.getElementById('fusionbody').innerHTML = '<div style="font-size:10px;color:#ffd166;letter-spacing:1px;margin-bottom:6px;">SYNTHESIZING...</div><div class="ti"><div class="td" style="background:#ffd166"></div><div class="td" style="background:#ffd166"></div><div class="td" style="background:#ffd166"></div></div>';
+
+  const synth = ['claude','openai','gemini','deepseek','kimi'].find(id=>results[id]) || valid[0][0];
+  const sp = `${sys}\n\nUser asked: "${txt}"\n\n${valid.map(([id,r])=>`### ${M[id].n}:\n${r}`).join('\n\n---\n\n')}\n\nSynthesize all responses above into ONE comprehensive, direct answer. Do not mention the other AIs — just give the best unified answer.`;
+
+  try {
+    const final = await callAI(synth, [{role:'user',content:sp}], '');
+    document.getElementById('fusionbody').innerHTML = `
+      <div class="fusion-title"><div class="fusion-dot"></div>UNIFIED NOVA ANSWER</div>
+      <div>${renderMD(final)}</div>
+      <div style="margin-top:8px;display:flex;gap:6px;">
+        <button class="abtn" onclick="copyEl(this)">COPY</button>
+        <button class="abtn" onclick="toggleSrcs(this)">SHOW SOURCES</button>
+      </div>
+      <div class="src-detail" style="display:none;margin-top:8px;display:none;">
+        ${valid.map(([id,r])=>`<div style="background:#050810;border:1px solid #1a2a3a;border-radius:7px;padding:10px;margin-bottom:6px;">
+          <div style="font-size:9px;font-weight:700;color:${M[id].c};letter-spacing:1px;margin-bottom:6px;">${M[id].n}</div>
+          <div style="font-size:11px;line-height:1.6;color:#7a9bb5;">${r.slice(0,300)}${r.length>300?'...':''}</div>
+        </div>`).join('')}
+      </div>`;
+    conv.msgs.push({role:'assistant',content:final,model:'fusion',ts:Date.now()});
+    if(tts) speak(final);
+  } catch(e) {
+    const fb = valid[0];
+    document.getElementById('fusionbody').innerHTML = renderMD(fb[1]);
+    conv.msgs.push({role:'assistant',content:fb[1],model:fb[0],ts:Date.now()});
+  }
+  scrollBot();
+}
+
+window.toggleSrcs = function(btn) {
+  const d = btn.closest('.fusion-wrap').querySelector('.src-detail');
+  const show = d.style.display==='none'||!d.style.display;
+  d.style.display = show?'block':'none';
+  btn.textContent = show?'HIDE SOURCES':'SHOW SOURCES';
+};
+
+// ── COMPARE ──────────────────────────────────────────────────
+async function doCompare(txt, sys, conv) {
+  const keys = getKeys();
+  const active = sel.filter(id=>M[id].api&&keys[id]&&keys[id].length>8);
+  if (active.length===0){showErr('NOVA','No API keys. Add keys in Accounts.');return;}
+
+  const chat = document.getElementById('chat');
+  const wrap = document.createElement('div');
+  wrap.className='msg ai';
+  wrap.innerHTML=`<div class="av aa">AI</div><div class="mwrap" style="max-width:100%;width:100%;"><div class="mtag">COMPARE — ${active.length} MODELS</div><div id="cmpgrid" style="display:flex;flex-direction:column;gap:8px;width:100%;"></div></div>`;
+  chat.appendChild(wrap);
+  scrollBot();
+
+  const grid=document.getElementById('cmpgrid');
+  active.forEach(id=>{
+    const c=document.createElement('div');
+    c.style.cssText='background:#0d1528;border:1px solid #1a2a3a;border-radius:8px;overflow:hidden;';
+    c.innerHTML=`<div style="padding:7px 12px;border-bottom:1px solid #1a2a3a;display:flex;align-items:center;gap:8px;justify-content:space-between;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:5px;height:5px;border-radius:50%;background:${M[id].c};"></div><span style="font-size:10px;font-weight:700;color:${M[id].c};">${M[id].n}</span></div><div class="src-chip wait" id="cst-${id}">...</div></div><div style="padding:10px 12px;font-size:11px;line-height:1.6;max-height:150px;overflow-y:auto;" id="cbd-${id}"><div class="ti"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+    grid.appendChild(c);
+  });
+
+  const hist=conv.msgs.slice(0,-1).map(m=>({role:m.role,content:m.content}));
+  hist.push({role:'user',content:txt});
+
+  await Promise.all(active.map(async id=>{
+    try{
+      const r=await callAI(id,hist,sys);
+      document.getElementById('cbd-'+id).innerHTML=renderMD(r);
+      const st=document.getElementById('cst-'+id);
+      st.classList.remove('wait');st.classList.add('done');st.textContent='DONE';st.style.setProperty('--c','#06ffa5');
+    }catch(e){
+      document.getElementById('cbd-'+id).innerHTML=`<span style="color:#ff4d6d;font-size:11px;">${e.message}</span>`;
+      const st=document.getElementById('cst-'+id);
+      st.classList.remove('wait');st.classList.add('err');st.textContent='ERR';
+    }
+    scrollBot();
+  }));
+}
+
+// ── AGENT ──────────────────────────────────────────────────
+async function doAgent(txt, sys, conv) {
+  const keys=getKeys();
+  const orch=['claude','openai','gemini','deepseek'].find(id=>keys[id]&&keys[id].length>8);
+  if(!orch){showErr('NOVA','No API keys. Add keys in Accounts.');return;}
+
+  const chat=document.getElementById('chat');
+  const wrap=document.createElement('div');
+  wrap.className='msg ai';
+  wrap.innerHTML=`<div class="av aa" style="font-size:13px;">🤖</div><div class="mwrap" style="max-width:100%;width:100%;"><div class="mtag">NOVA AGENT</div><div id="agwrap" style="display:flex;flex-direction:column;gap:8px;width:100%;"></div></div>`;
+  chat.appendChild(wrap);
+  scrollBot();
+
+  const agwrap=document.getElementById('agwrap');
+
+  // Decompose
+  let steps=['Analyze the question','Research key information','Synthesize findings','Generate comprehensive answer'];
+  try {
+    const dr=await callAI(orch,[{role:'user',content:`List 4 subtasks to answer: "${txt}". Reply with JSON array only: ["task1","task2","task3","task4"]`}],'');
+    const m=dr.match(/\[[\s\S]*?\]/);
+    if(m) steps=JSON.parse(m[0]).slice(0,4);
+  }catch(e){}
+
+  const stepsDiv=document.createElement('div');
+  stepsDiv.style.cssText='background:#0d1528;border:1px solid #1a2a3a;border-radius:8px;padding:12px;';
+  stepsDiv.innerHTML='<div style="font-size:9px;color:#3d5a73;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">⚡ STEPS</div>'+
+    steps.map((s,i)=>`<div id="st-${i}" style="display:flex;align-items:center;gap:8px;font-size:11px;color:#3d5a73;padding:3px 0;"><span id="sti-${i}">◯</span><span>${s}</span></div>`).join('');
+  agwrap.appendChild(stepsDiv);
+
+  const results=[];
+  for(let i=0;i<steps.length;i++){
+    document.getElementById('st-'+i).style.color='#00d2ff';
+    document.getElementById('sti-'+i).textContent='●';
+    scrollBot();
+    try{
+      const r=await callAI(orch,[{role:'user',content:`${sys}\nTask: "${txt}"\nComplete step: "${steps[i]}"${results.length?'\nPrevious: '+results.slice(-1)[0].slice(0,200):''}` }],'');
+      results.push(r);
+      document.getElementById('st-'+i).style.color='#06ffa5';
+      document.getElementById('sti-'+i).textContent='✓';
+    }catch(e){
+      results.push('Error: '+e.message);
+      document.getElementById('st-'+i).style.color='#ff4d6d';
+    }
+    await new Promise(r=>setTimeout(r,200));
+  }
+
+  // Final synthesis
+  const finalDiv=document.createElement('div');
+  finalDiv.style.cssText='background:#0d1528;border:1px solid rgba(255,209,102,.2);border-radius:8px;padding:12px;';
+  finalDiv.innerHTML='<div style="font-size:9px;color:#ffd166;letter-spacing:1.5px;margin-bottom:8px;">⚡ FINAL ANSWER</div><div class="ti"><div class="td" style="background:#ffd166"></div><div class="td" style="background:#ffd166"></div><div class="td" style="background:#ffd166"></div></div>';
+  agwrap.appendChild(finalDiv);
+  scrollBot();
+
+  try{
+    const final=await callAI(orch,[{role:'user',content:`${sys}\nQuestion: "${txt}"\nResearch done:\n${results.join('\n\n')}\n\nWrite final comprehensive answer.`}],'');
+    finalDiv.innerHTML='<div style="font-size:9px;color:#ffd166;letter-spacing:1.5px;margin-bottom:8px;">⚡ FINAL ANSWER</div>'+renderMD(final)+
+      '<div style="margin-top:8px;"><button class="abtn" onclick="copyEl(this)">COPY</button></div>';
+    conv.msgs.push({role:'assistant',content:final,model:orch+'_agent',ts:Date.now()});
+    if(tts) speak(final);
+  }catch(e){
+    finalDiv.innerHTML+=`<span style="color:#ff4d6d">${e.message}</span>`;
+  }
+  scrollBot();
+}
+
+// ── AI CALLS ──────────────────────────────────────────────────
+async function callAI(model, msgs, sys, att) {
+  const keys=getKeys();
+  switch(model){
+    case 'claude': return callClaude(msgs,sys,keys.claude,att);
+    case 'openai': return callOpenAI(msgs,sys,keys.openai,att);
+    case 'gemini': return callGemini(msgs,sys,keys.gemini,att);
+    case 'deepseek': return callCompat(msgs,sys,keys.deepseek,'https://api.deepseek.com/v1','deepseek-chat');
+    case 'perplexity': return callCompat(msgs,sys,keys.perplexity,'https://api.perplexity.ai','llama-3.1-sonar-large-128k-online');
+    case 'kimi': return callCompat(msgs,sys,keys.kimi,'https://api.moonshot.cn/v1','moonshot-v1-8k');
+    case 'grok': return callCompat(msgs,sys,keys.grok,'https://api.x.ai/v1','grok-2-latest');
+    default: return callGemini(msgs,sys,keys.gemini,att);
+  }
+}
+
+async function callClaude(msgs,sys,key,att) {
+  if(!key) throw new Error('Claude API key missing — go to Accounts tab');
+  let content;
+  if(att&&att.isImage) content=[{type:'image',source:{type:'base64',media_type:att.type,data:att.data.split(',')[1]}},{type:'text',text:msgs[msgs.length-1].content}];
+  else content=msgs[msgs.length-1].content;
+  const allMsgs=[...msgs.slice(0,-1),{role:'user',content}];
+  const body={model:'claude-sonnet-4-5',max_tokens:4096,messages:allMsgs.filter(m=>m.role!=='system')};
+  if(sys) body.system=sys;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'Claude error '+r.status);}
+  return (await r.json()).content[0].text;
+}
+
+async function callOpenAI(msgs,sys,key,att) {
+  if(!key) throw new Error('OpenAI API key missing — go to Accounts tab');
+  const allMsgs=sys?[{role:'system',content:sys},...msgs]:msgs;
+  if(att&&att.isImage){
+    const last=allMsgs[allMsgs.length-1];
+    allMsgs[allMsgs.length-1]={role:'user',content:[{type:'image_url',image_url:{url:att.data}},{type:'text',text:last.content}]};
+  }
+  const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',messages:allMsgs,max_tokens:4096})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'OpenAI error '+r.status);}
+  return (await r.json()).choices[0].message.content;
+}
+
+async function callGemini(msgs,sys,key,att) {
+  if(!key) throw new Error('Gemini key missing — go to Accounts tab and add FREE key from aistudio.google.com');
+  const model=localStorage.getItem('ng')||'gemini-1.5-pro';
+  let contents=msgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+  if(att&&att.isImage){
+    const last=contents[contents.length-1];
+    last.parts=[{inline_data:{mime_type:att.type,data:att.data.split(',')[1]}},{text:msgs[msgs.length-1].content}];
+  }
+  const body={contents};
+  if(sys) body.systemInstruction={parts:[{text:sys}]};
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'Gemini error '+r.status);}
+  const d=await r.json();
+  if(!d.candidates||!d.candidates[0]) throw new Error('Gemini returned no response');
+  return d.candidates[0].content.parts[0].text;
+}
+
+async function callCompat(msgs,sys,key,base,model) {
+  if(!key) throw new Error('API key missing for this model — go to Accounts tab');
+  const allMsgs=sys?[{role:'system',content:sys},...msgs]:msgs;
+  const r=await fetch(base+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model,messages:allMsgs,max_tokens:4096})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||'API error '+r.status);}
+  return (await r.json()).choices[0].message.content;
+}
+
+// ── RENDER ──────────────────────────────────────────────────
+function addMsg(msg) {
+  const chat=document.getElementById('chat');
+  // Remove welcome
+  const w=chat.querySelector('div[style*="min-height:300px"]');
+  if(w) w.remove();
+
+  const el=document.createElement('div');
+  el.className='msg '+(msg.role==='user'?'u':'ai');
+  if(msg.role==='user'){
+    el.innerHTML=`<div class="av ua">YOU</div><div class="mwrap"><div class="mtag" style="text-align:right;">YOU</div><div class="bub ub">${esc(msg.content)}</div></div>`;
+  } else {
+    const m=M[msg.model]||{n:'AI',c:'#00d2ff'};
+    el.innerHTML=`
+      <div class="av aa" style="border-color:${m.c}44;background:${m.c}12;">
+        <div style="width:6px;height:6px;border-radius:50%;background:${m.c};box-shadow:0 0 4px ${m.c};"></div>
+      </div>
+      <div class="mwrap" style="max-width:100%;width:100%;">
+        <div class="mtag" style="color:${m.c};">${m.n.toUpperCase()}</div>
+        <div class="bub ab">${renderMD(msg.content||'')}</div>
+        <div class="mact">
+          <button class="abtn" onclick="copyEl(this)">COPY</button>
+        </div>
+      </div>`;
+  }
+  chat.appendChild(el);
+  scrollBot();
+  return el;
+}
+
+function addTyping(model) {
+  const chat=document.getElementById('chat');
+  const m=M[model]||{n:'AI',c:'#00d2ff'};
+  const el=document.createElement('div');
+  el.className='msg ai'; el.id='typing';
+  el.innerHTML=`<div class="av aa" style="border-color:${m.c}44;background:${m.c}12;"><div style="width:6px;height:6px;border-radius:50%;background:${m.c};"></div></div><div class="mwrap"><div class="mtag" style="color:${m.c};">${m.n.toUpperCase()}</div><div class="bub ab"><div class="ti"><div class="td"></div><div class="td"></div><div class="td"></div></div></div></div>`;
+  chat.appendChild(el);
+  scrollBot();
+  return el;
+}
+
+function showErr(model, msg) {
+  const chat=document.getElementById('chat');
+  const el=document.createElement('div');
+  el.className='msg ai';
+  const isKey=msg.includes('key')||msg.includes('401')||msg.includes('403');
+  el.innerHTML=`
+    <div class="av" style="border-color:#ff4d6d44;background:#ff4d6d11;color:#ff4d6d;">!</div>
+    <div class="mwrap" style="max-width:100%;width:100%;">
+      <div class="mtag" style="color:#ff4d6d;">ERROR — ${model}</div>
+      <div class="bub ab" style="border-color:#ff4d6d33;width:100%;">
+        <div style="color:#ff4d6d;margin-bottom:${isKey?'10px':'0'};">${msg}</div>
+        ${isKey?`<button onclick="showScr('acc')" style="padding:7px 14px;border-radius:7px;background:linear-gradient(135deg,#00d2ff,#0099bb);border:none;color:#000;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:1px;">🔗 GO TO ACCOUNTS</button>`:''}
+      </div>
+    </div>`;
+  chat.appendChild(el);
+  scrollBot();
+}
+
+function renderMD(t) {
+  if(!t) return '';
+  return t
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```([\w]*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s,'<ul>$1</ul>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>').replace(/^(?!<[huplo])/gm,'')
+    .replace(/\n/g,'<br>');
+}
+
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function removeEl(el){if(el&&el.parentNode)el.parentNode.removeChild(el);}
+function scrollBot(){const c=document.getElementById('chat');setTimeout(()=>c.scrollTop=c.scrollHeight,80);}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+window.copyEl=function(btn){
+  const bub=btn.closest('.mwrap').querySelector('.bub,.fusion-wrap');
+  if(bub){navigator.clipboard.writeText(bub.innerText);btn.textContent='COPIED!';setTimeout(()=>btn.textContent='COPY',2000);}
+};
+
+// ── ACCOUNTS ──────────────────────────────────────────────────
+function buildAccounts() {
+  const list=document.getElementById('acclist');
+  if(!list) return;
+  const keys=getKeys();
+  list.innerHTML='';
+  const defs=[
+    {id:'gemini',  ico:'✨',n:'Gemini (Google)', link:'https://aistudio.google.com/apikey',    free:true},
+    {id:'claude',  ico:'🤖',n:'Claude',          link:'https://console.anthropic.com',          free:false},
+    {id:'openai',  ico:'💬',n:'ChatGPT',         link:'https://platform.openai.com/api-keys',   free:false},
+    {id:'deepseek',ico:'🔵',n:'DeepSeek',        link:'https://platform.deepseek.com',          free:true},
+    {id:'perplexity',ico:'🌊',n:'Perplexity',   link:'https://www.perplexity.ai/settings/api', free:false},
+    {id:'kimi',    ico:'🔴',n:'Kimi',            link:'https://platform.moonshot.cn',           free:true},
+    {id:'grok',    ico:'⚡',n:'Grok (xAI)',      link:'https://console.x.ai',                   free:false},
+    {id:'blackbox',ico:'◼',n:'Blackbox AI',      link:'https://www.blackbox.ai',                webOnly:true},
+    {id:'manus',   ico:'🟣',n:'Manus AI',        link:'https://manus.im',                       webOnly:true},
+  ];
+  defs.forEach(d=>{
+    const has=keys[d.id]&&keys[d.id].length>8;
+    const card=document.createElement('div');
+    card.className='acard';
+    card.innerHTML=`
+      <div class="ahead">
+        <div style="width:30px;height:30px;border-radius:7px;background:${M[d.id]?.c||'#333'}22;display:flex;align-items:center;justify-content:center;font-size:14px;">${d.ico}</div>
+        <div><div class="aname">${d.n}</div><div class="adesc">${d.webOnly?'Web login only':d.free?'Free API available':'Paid API'}</div></div>
+        <div class="astatus ${has?'ok':''}">${d.webOnly?'WEB':has?'✅ ON':'OFF'}</div>
+      </div>
+      ${d.webOnly?`
+        <div class="akey"><button class="akeybtn" onclick="showScr('web');switchWebTab('${d.id}')" style="background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.3);color:#ffd166;">🌐 OPEN WEB PANEL</button></div>
+      `:`
+        <div class="akey">
+          <input type="password" class="akeyinput" id="ak-${d.id}" placeholder="${has?'••••••• (saved)':'Paste API key...'}" value="${has?keys[d.id]:''}">
+          <button class="akeybtn" onclick="saveAccKey('${d.id}')" style="background:rgba(0,210,255,.12);border:1px solid rgba(0,210,255,.3);color:#00d2ff;">SAVE</button>
+          <button class="akeybtn" onclick="window.open('${d.link}','_blank')" style="background:transparent;border:1px solid #1a2a3a;color:#5a7a90;">${d.free?'FREE':'KEY'}</button>
+        </div>
+      `}`;
+    list.appendChild(card);
+  });
+}
+
+function saveAccKey(id) {
+  const el=document.getElementById('ak-'+id);
+  if(!el) return;
+  const v=el.value.trim();
+  if(!v||v.length<8){notif('Paste a valid key','err');return;}
+  const k=getKeys(); k[id]=v;
+  saveKeys(k);
+  notif('✅ '+M[id].n+' saved!','ok');
+  buildAccounts();
+  buildChips();
+}
+
+// ── WEB PANELS ──────────────────────────────────────────────────
+function buildWebTabs() {
+  const tabs=document.getElementById('wtabs');
+  const frames=document.getElementById('wframes');
+  if(!tabs||!frames) return;
+  tabs.innerHTML=''; frames.innerHTML='';
+  Object.entries(M).forEach(([id,m],i)=>{
+    const tab=document.createElement('button');
+    tab.className='wtab'+(i===0?' on':'');
+    tab.id='wtab-'+id; tab.textContent=m.n;
+    tab.onclick=()=>switchWebTab(id);
+    tabs.appendChild(tab);
+    const frame=document.createElement('div');
+    frame.className='wframe'+(i===0?' on':'');
+    frame.id='wf-'+id;
+    frame.innerHTML=`
+      <div style="font-size:36px;">${['✨','🤖','💬','🔵','🌊','🔴','⚡','◼','🟣'][i]||'🤖'}</div>
+      <div style="font-size:15px;font-weight:700;">${m.n}</div>
+      <div style="font-size:11px;color:#5a7a90;line-height:1.6;max-width:260px;">${m.api?m.n+' web app — stay logged into your account':'No API available. Log in on the web.'}</div>
+      <button class="wopenbtn" onclick="window.open('${m.url}','_blank')" style="background:linear-gradient(135deg,${m.c},${m.c}88);color:#fff;">OPEN ${m.n.toUpperCase()}</button>
+      ${m.api?'<div style="font-size:9px;color:#3d5a73;margin-top:-8px;">⚡ Also available via API in Chat tab</div>':''}`;
+    frames.appendChild(frame);
+  });
+}
+
+let activeWebTab='gemini';
+function switchWebTab(id) {
+  activeWebTab=id;
+  document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.wframe').forEach(f=>f.classList.remove('on'));
+  const t=document.getElementById('wtab-'+id);
+  const f=document.getElementById('wf-'+id);
+  if(t) t.classList.add('on');
+  if(f) f.classList.add('on');
+}
+
+// ── VOICE ──────────────────────────────────────────────────
+function toggleMic() {
+  if(listening){if(recog)recog.stop();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){notif('Voice not supported','err');return;}
+  recog=new SR(); recog.lang='en-US'; recog.interimResults=true;
+  recog.onstart=()=>{listening=true;document.getElementById('micbtn').classList.add('rec');document.getElementById('voicebar').style.display='block';};
+  recog.onresult=e=>{let t='';for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;document.getElementById('msgin').value=t;resize(document.getElementById('msgin'));};
+  recog.onend=()=>{listening=false;document.getElementById('micbtn').classList.remove('rec');document.getElementById('voicebar').style.display='none';const v=document.getElementById('msgin').value.trim();if(v)setTimeout(send,400);};
+  recog.onerror=e=>{listening=false;document.getElementById('micbtn').classList.remove('rec');document.getElementById('voicebar').style.display='none';notif('Mic error: '+e.error,'err');};
+  recog.start();
+  notif('🎤 Listening...');
+}
+
+function toggleTTS() {
+  tts=!tts;
+  document.getElementById('ttsbtn').classList.toggle('tts',tts);
+  document.getElementById('ttsbtn').textContent=tts?'🔊':'🔇';
+  notif(tts?'🔊 AI will read responses':'🔇 TTS off');
+}
+
+function speak(text) {
+  if(!tts||!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.replace(/[#*`_~]/g,'').slice(0,500));
+  u.rate=0.95; u.lang='en-US';
+  window.speechSynthesis.speak(u);
+}
+
+function openCam(){document.getElementById('camin').click();}
+
+function onFile(input) {
+  const f=input.files[0]; if(!f) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    attach={name:f.name,type:f.type,size:f.size,data:e.target.result,isImage:f.type.startsWith('image/'),isPDF:f.type==='application/pdf'};
+    const bar=document.getElementById('attachbar');
+    bar.style.display='flex';
+    document.getElementById('atchico').textContent=attach.isImage?'🖼️':'📄';
+    document.getElementById('atchname').textContent=f.name;
+    document.getElementById('atchsize').textContent=(f.size/1024).toFixed(1)+' KB';
+    notif('✅ '+f.name+' attached','ok');
+  };
+  f.type.startsWith('image/')||f.type==='application/pdf'?reader.readAsDataURL(f):reader.readAsText(f);
+  input.value='';
+}
+
+function clearAttach(){attach=null;const b=document.getElementById('attachbar');if(b)b.style.display='none';}
+
+// ── UTILS ──────────────────────────────────────────────────
+function notif(msg,type='') {
+  const el=document.createElement('div');
+  el.className='notif '+type; el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3000);
+}
+
+function save(){try{localStorage.setItem('nc',JSON.stringify(convs.slice(-20)));}catch(e){}}
+
+
+// ── DIAGNOSIS ──────────────────────────────────────────────────
+async function runDiag() {
+  const keys = getKeys();
+  const chat = document.getElementById('chat');
+  const el = document.createElement('div');
+  el.className = 'msg ai';
+  el.innerHTML = '<div class="av aa">🔍</div><div class="mwrap" style="max-width:100%;width:100%;"><div class="mtag" style="color:#ffd166;">DIAGNOSIS RUNNING...</div><div class="bub ab" id="diagbody" style="width:100%;"><div class="ti"><div class="td"></div><div class="td"></div><div class="td"></div></div></div></div>';
+  chat.appendChild(el);
+  scrollBot();
+
+  let report = '<div style="font-size:11px;line-height:1.8;">';
+  
+  // Check keys
+  const keyStatus = Object.entries(M).filter(([,m])=>m.api).map(([id,m]) => {
+    const k = keys[id];
+    const has = k && k.length > 8;
+    return `<div>${has?'✅':'❌'} <span style="color:${m.c}">${m.n}</span>: ${has?'Key saved ('+k.length+' chars)':'No key'}</div>`;
+  }).join('');
+  report += '<div style="font-weight:700;color:#ffd166;margin-bottom:6px;">API KEYS STATUS:</div>' + keyStatus + '<br>';
+
+  // Test network with Gemini if key exists
+  if (keys.gemini && keys.gemini.length > 8) {
+    report += '<div style="font-weight:700;color:#ffd166;margin-bottom:4px;">TESTING GEMINI...</div>';
+    document.getElementById('diagbody').innerHTML = report + '<div class="ti"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+    try {
+      const r = await callGemini([{role:'user',content:'Reply with: OK'}], '', keys.gemini);
+      report += `<div style="color:#06ffa5;">✅ Gemini works! Response: ${r.slice(0,50)}</div>`;
+    } catch(e) {
+      report += `<div style="color:#ff4d6d;">❌ Gemini failed: ${e.message}</div>`;
+      if (e.message.includes('Failed to fetch') || e.message.includes('network')) {
+        report += '<div style="color:#ffd166;margin-top:4px;">⚠ Network blocked — UAE ISPs may block API calls. Try VPN.</div>';
+      }
+    }
+  }
+
+  report += '<br><div style="font-size:10px;color:#5a7a90;">Device: '+navigator.userAgent.slice(0,60)+'</div>';
+  report += '</div>';
+  document.getElementById('diagbody').innerHTML = report;
+  scrollBot();
+}
+
+// ── START ──────────────────────────────────────────────────
+window.onload=init;
+</script>
+</body>
+</html>
