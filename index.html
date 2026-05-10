@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#050810">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>NOVA AI</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -1061,6 +1063,7 @@ async function runDiag() {
 
 // ── START ──────────────────────────────────────────────────
 window.onload=init;
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").then(()=>console.log("SW registered")).catch(e=>console.log("SW error",e));}
 </script>
 </body>
 </html>
